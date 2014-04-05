@@ -25,12 +25,34 @@ class Unit( object ):
     def action( cls, action_terrain ):
         if cls.active().terrain is action_terrain or action_terrain.contains_unit():
             return False
-        elif Terrain.say_unit(cls.active().terrain).growth < 2:
+        if pygame.KEYDOWN:
+            ability = {
+                pygame.K_s:    cls.ability_seed(action_terrain),
+                pygame.K_t:  cls.ability_thorns(action_terrain),
+                pygame.K_p:  cls.ability_poison(action_terrain),
+                pygame.K_BACKSPACE: cls.ability_cancel(action_terrain)
+            }
+    
+    @classmethod
+    def ability_seed(cls, action_terrain):
+        if Terrain.say_unit(cls.active().terrain).growth < 2:
             return False
         else:
             Terrain.say_unit(cls.active().terrain).growth -= 2
             Unit( action_terrain )
             return True
+    
+    @classmethod
+    def ability_thorns(cls, action_terrain):
+        return True
+    
+    @classmethod
+    def ability_poison(cls, action_terrain):
+        return True
+    
+    @classmethod
+    def ability_cancel(cls, action_terrain):
+        return True
 
     @classmethod
     def action_up( cls, event ):
